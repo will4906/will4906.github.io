@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        about · 树华的博客
+        scrapy专利爬虫（二）——请求相关 · 树华的博客
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -67,6 +67,8 @@
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
@@ -74,27 +76,52 @@
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
     
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >willshuhua.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">scrapy专利爬虫（二）——请求相关</a>
+            </div>
+    </div>
+    
     <a class="home-link" href=/>willshuhua.</a>
 </header>
     <div class="wrapper">
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            scrapy专利爬虫（二）——请求相关
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/01/16</span>
+            </div>
         
     </div>
 </div>
@@ -164,12 +191,52 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h1><p>Hi����������</p>
+        <p>在这里笔者将会介绍一些关于发送request的相关内容。</p>
+<h2 id="Spider"><a href="#Spider" class="headerlink" title="Spider"></a>Spider</h2><p>Spider默认需要填写三个参数：</p>
+<table><br><tr><br><td>name</td><br><td>spider的独立名称，必须唯一</td><br></tr><br><tr><br><td>allowed_domains</td><br><td>允许爬取的范围，以专利爬虫为例，不会超出专利网站的范围，所以只需要填写”pss-system.gov.cn”即可。</td><br></tr><br><tr><br><td>start_urls</td><br><td>起始url，spider会首先请求这个参数里的地址。</td><br></tr><br><tr><br></tr></table>
+
+
+<h2 id="Request和FormRequest"><a href="#Request和FormRequest" class="headerlink" title="Request和FormRequest"></a>Request和FormRequest</h2><p>在Spider之后，如果想继续深入爬取，可以使用Requset或FormRequest对象建立新的链接。</p>
+<ul>
+<li>需要指定Request/FormRequset的callback参数，这是一个含reponse的回调函数，这样当请求完成后，scrapy会自动调用所设定的回调函数处理reponse。</li>
+<li>参数传递，Request和FormRequest都用meta这个参数，这个参数会跟随reponse在callback参数的回调函数中出现。所以可以进行参数传递。</li>
+<li>设定请求的method是get，post等。</li>
+<li>关于FormRequest，这是一个可以用来发送表单数据的请求，有个formData参数，可带tuple格式参数</li>
+<li>其他参数详见<a href="http://scrapy-chs.readthedocs.io/zh_CN/1.0/topics/request-response.html#request-objects" target="_blank" rel="noopener">官方文档</a></li>
+</ul>
+<p>在这里必须要解释的一个python关键字是<code>yield</code>，笔者的理解这是一个迭代对象生成器。对于list等可迭代对象，可以用函数的方式生成，只要在函数中使用yield这个关键字，代码在执行的时候会先挂起yield前的所有操作，当对象产生迭代行为，如for循环时才会执行前面的代码。在scrapy中将会经常使用这个关键字，发送请求。</p>
+<h2 id="下载延时"><a href="#下载延时" class="headerlink" title="下载延时"></a>下载延时</h2><p>在settings.py文件中，可以设置请求完成后的文件下载延时DOWNLOAD_DELAY，为了减轻服务器的压力这个延时不能设置得太低。</p>
+<h2 id="部分中间件"><a href="#部分中间件" class="headerlink" title="部分中间件"></a>部分中间件</h2><ul>
+<li>UserAgentMiddleware</li>
+</ul>
+<p>可以用来随机替换程序发送请求请求的User-Agent参数，伪装各种浏览器，不会轻易被服务器发现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RandomUserAgentMiddleware</span><span class="params">(UserAgentMiddleware)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_request</span><span class="params">(self, request, spider)</span>:</span></span><br><span class="line">        request.headers.setdefault(<span class="string">'User-Agent'</span>, HeadersEngine().getRandomUserAgent())</span><br></pre></td></tr></table></figure>
+<ul>
+<li>HttpProxyMiddleware</li>
+</ul>
+<p>可以用来实现ip代理的功能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProxyMiddleware</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_request</span><span class="params">(self, request, spider)</span>:</span></span><br><span class="line">        request.meta[<span class="string">'proxy'</span>] = <span class="string">"http://"</span> + 你的代理ip + : + 你的代理ip的端口号</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如何开启中间件</li>
+</ul>
+<p>在settings.py文件中，有这样一段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    <span class="string">'PatentCrawler.middlewares.ProxyMiddleware'</span>: <span class="number">543</span>,</span><br><span class="line">    <span class="string">'PatentCrawler.middlewares.RandomUserAgentMiddleware'</span>: <span class="number">542</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要在花括号内将定义的中间件填写上去，并填写优先级。</p>
+<h2 id="源码下载"><a href="#源码下载" class="headerlink" title="源码下载"></a>源码下载</h2><ul>
+<li><a href="https://github.com/will4906/PatentCrawler" target="_blank" rel="noopener">github</a></li>
+</ul>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+        
+            <li class="previous">
+                <a href= "/2018/01/16/scrapy专利爬虫（一）——scrapy简单介绍/" title= scrapy专利爬虫（一）——scrapy简单介绍 >
+                    <span>Previous Post</span>
+                    <span>scrapy专利爬虫（一）——scrapy简单介绍</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -238,6 +305,13 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spider"><span class="toc-number">1.</span> <span class="toc-text"><a href="#Spider" class="headerlink" title="Spider"></a>Spider</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Request和FormRequest"><span class="toc-number">2.</span> <span class="toc-text"><a href="#Request&#x548C;FormRequest" class="headerlink" title="Request&#x548C;FormRequest"></a>Request&#x548C;FormRequest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载延时"><span class="toc-number">3.</span> <span class="toc-text"><a href="#&#x4E0B;&#x8F7D;&#x5EF6;&#x65F6;" class="headerlink" title="&#x4E0B;&#x8F7D;&#x5EF6;&#x65F6;"></a>&#x4E0B;&#x8F7D;&#x5EF6;&#x65F6;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部分中间件"><span class="toc-number">4.</span> <span class="toc-text"><a href="#&#x90E8;&#x5206;&#x4E2D;&#x95F4;&#x4EF6;" class="headerlink" title="&#x90E8;&#x5206;&#x4E2D;&#x95F4;&#x4EF6;"></a>&#x90E8;&#x5206;&#x4E2D;&#x95F4;&#x4EF6;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码下载"><span class="toc-number">5.</span> <span class="toc-text"><a href="#&#x6E90;&#x7801;&#x4E0B;&#x8F7D;" class="headerlink" title="&#x6E90;&#x7801;&#x4E0B;&#x8F7D;"></a>&#x6E90;&#x7801;&#x4E0B;&#x8F7D;</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">

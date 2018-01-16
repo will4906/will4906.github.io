@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        about · 树华的博客
+        树华的博客
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -162,27 +162,180 @@
             }
         </script>
         <div class="container container-unloaded">
-            <main class="main post-page">
-    <article class="article-entry">
-        <h1 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h1><p>Hi����������</p>
-
-    </article>
-    <!-- 前后页  -->
-    <ul class="post-pager">
-        
-        
-    </ul>
-    <!-- 评论插件 -->
-    <!-- 来必力City版安装代码 -->
-
-<!-- City版安装代码已完成 -->
+            <main class="main index-page">
     
     
-    <!--PC版-->
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2018/01/16/scrapy专利爬虫（二）——请求相关/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>scrapy专利爬虫（二）——请求相关</span>
+                    </h2>
+                <div class="abstract-content">
+                    在这里笔者将会介绍一些关于发送request的相关内容。
+SpiderSpider默认需要填写三个参数：
+namespider的独立名称，必须唯一allowed_domains允许爬取的范围，以专利爬虫为例，不会超出专利网站的范围，所以只需要填写”pss-system.gov.cn”即可。start_urls起始url，spider会首先请求这个参数里的地址。
 
-    <!--PC版-->
 
+Request和FormRequest在Spider之后，如果想继续深入爬取，可以使用Requset或FormRequest对象建立新的链接。
 
+需要指定Request/FormRequset的callback参数，这是一个含...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/16</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2018/01/16/scrapy专利爬虫（一）——scrapy简单介绍/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>scrapy专利爬虫（一）——scrapy简单介绍</span>
+                    </h2>
+                <div class="abstract-content">
+                    概述scrapy是一款方便，快捷的开源爬虫框架。
+
+An open source and collaborative framework for extracting the data you need from websites.
+In a fast, simple, yet extensible way.
+
+在上一版本中，笔者采用selenium的方式进行数据采集，采集速度偏慢，而且有莫名的原因会导致第一次采集失败。改用scrapy之后，就像鸟枪换大炮一般，效果显著。
+特点
+多线程
+
+尽管python中存在着GIL锁，导致多线程的效果不是特别理想，但是对于网络请求这种本身就需要等待的...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/16</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2018/01/16/scrapy专利爬虫（四）——数据处理/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>scrapy专利爬虫（四）——数据处理</span>
+                    </h2>
+                <div class="abstract-content">
+                    说到scrapy的数据处理，就必须先介绍两个组件item和pipeline。
+itemitem的使用比较简单，只需要定义一个继承自scrapy.Item的类，在类中定义需要采集的元素即可，比如：
+123456789101112# 专利名称name = scrapy.Field()# 类型（公告，授权公告）type = scrapy.Field()# 专利类型patentType = scrapy.Field()# 申请号requestNumber = scrapy.Field()# 申请日requestDate = scrapy.Field()# 公布日publishDate = scr...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/16</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2018/01/16/scrapy专利爬虫（三）——简单实际操作/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>scrapy专利爬虫（三）——简单实际操作</span>
+                    </h2>
+                <div class="abstract-content">
+                    确定链接在chrome中打开审查元素中的network选项，查看查询专利时发送的请求。观察后发现在每次查询的时候，浏览器都会先发送两条请求给服务器。
+
+发送相关请求经过观察发现，网站的查询流程是
+
+先发送不带参数的post请求preExecuteSearch!preExcuteSearch.do将ip地址传给服务器
+然后再发送biaogejsAC!executeCommandSearchUnLogin.do将查询参数发给服务器
+
+填写表单，发送请求这里只给出一个简单的例子，具体实现见github或代码附件
+12345678910111213141516171819202122232425...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/16</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2018/01/16/序列化/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>python序列化</span>
+                    </h2>
+                <div class="abstract-content">
+                    pickle可利用pickle将python对象以二进制方式写进文件中。也可以利用pickle读出来。
+
+pickle.dump(obj, file, protocol=None, *, fix_imports=True)
+
+将python对象写进文件中。e.g.
+123filename = 'model.pkl'with open(filename, 'wb') as f:    pickle.dump(instance, f)        # instance是一个python对象
+
+pickle.load(file, *, fix_imports=True, encoding=”...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/16</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2018/01/16/几个sql触发器样例/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>数据库触发器</span>
+                    </h2>
+                <div class="abstract-content">
+                    触发器虽然在sql标准中有支持，但是几个数据库仍然还是具有特殊的语法。笔者试着写了几个比较常用的触发器作为记录。
+DEMO使用一下两个表作为触发器的使用示例
+
+test1(a, b, c, d)
+test2(a, c, d)Mysql
+insert
+123456789DROP TRIGGER IF EXISTS after_insert_trigger;DELIMITER $CREATE TRIGGER after_insert_triggerAFTER INSERT ON test1FOR EACH ROWBEGIN	INSERT INTO test2 VALUES(NEW.a, NE...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/16</span>
+                </div>
+            </div>
+        </article>
+    
+    <!-- paginator  -->
     
 </main>
             <!-- profile -->

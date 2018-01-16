@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        about · 树华的博客
+        python序列化 · 树华的博客
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -67,6 +67,8 @@
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
@@ -74,27 +76,52 @@
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
     
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >willshuhua.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">python序列化</a>
+            </div>
+    </div>
+    
     <a class="home-link" href=/>willshuhua.</a>
 </header>
     <div class="wrapper">
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            python序列化
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/01/16</span>
+            </div>
         
     </div>
 </div>
@@ -164,12 +191,35 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h1><p>Hi����������</p>
-
+        <h2 id="pickle"><a href="#pickle" class="headerlink" title="pickle"></a>pickle</h2><p>可利用pickle将python对象以二进制方式写进文件中。也可以利用pickle读出来。</p>
+<ul>
+<li>pickle.dump(obj, file, protocol=None, *, fix_imports=True)</li>
+</ul>
+<p>将python对象写进文件中。<br>e.g.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">'model.pkl'</span></span><br><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    pickle.dump(instance, f)        <span class="comment"># instance是一个python对象</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>pickle.load(file, *, fix_imports=True, encoding=”ASCII”, errors=”strict”)</li>
+</ul>
+<p>将python对象从文件中读出。<br>e.g.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">'model.pkl'</span></span><br><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    instance = pickle.load(f)</span><br></pre></td></tr></table></figure>
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+            <li class="next">
+                <a href= "/2018/01/16/scrapy专利爬虫（三）——简单实际操作/" title= scrapy专利爬虫（三）——简单实际操作 >
+                    <span>Next Post</span>
+                    <span>scrapy专利爬虫（三）——简单实际操作</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2018/01/16/几个sql触发器样例/" title= 数据库触发器 >
+                    <span>Previous Post</span>
+                    <span>数据库触发器</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -238,6 +288,13 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pickle"><span class="toc-number">1.</span> <span class="toc-text"><a href="#pickle" class="headerlink" title="pickle"></a>pickle</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">

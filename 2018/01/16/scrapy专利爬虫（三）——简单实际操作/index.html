@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        about · 树华的博客
+        scrapy专利爬虫（三）——简单实际操作 · 树华的博客
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -67,6 +67,8 @@
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
@@ -74,27 +76,52 @@
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
     
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >willshuhua.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">scrapy专利爬虫（三）——简单实际操作</a>
+            </div>
+    </div>
+    
     <a class="home-link" href=/>willshuhua.</a>
 </header>
     <div class="wrapper">
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            scrapy专利爬虫（三）——简单实际操作
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/01/16</span>
+            </div>
         
     </div>
 </div>
@@ -164,12 +191,42 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h1><p>Hi����������</p>
+        <h2 id="确定链接"><a href="#确定链接" class="headerlink" title="确定链接"></a>确定链接</h2><p>在chrome中打开审查元素中的network选项，查看查询专利时发送的请求。观察后发现在每次查询的时候，浏览器都会先发送两条请求给服务器。</p>
+<p><img src="http://img.blog.csdn.net/20170521010929121?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd2lsbDQ5MDY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+<h2 id="发送相关请求"><a href="#发送相关请求" class="headerlink" title="发送相关请求"></a>发送相关请求</h2><p>经过观察发现，网站的查询流程是</p>
+<ul>
+<li>先发送不带参数的post请求preExecuteSearch!preExcuteSearch.do将ip地址传给服务器</li>
+<li>然后再发送biaogejsAC!executeCommandSearchUnLogin.do将查询参数发给服务器</li>
+</ul>
+<h2 id="填写表单，发送请求"><a href="#填写表单，发送请求" class="headerlink" title="填写表单，发送请求"></a>填写表单，发送请求</h2><p>这里只给出一个简单的例子，具体实现见github或代码附件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">"Content-Type"</span>: <span class="string">"application/x-www-form-urlencoded"</span></span><br><span class="line">&#125;</span><br><span class="line">searchExp = SearchService.getCnSearchExp(self.startDate, proposer, inventor, type)</span><br><span class="line">formData = &#123;</span><br><span class="line">    <span class="string">"searchCondition.searchExp"</span>: searchExp,</span><br><span class="line">    <span class="string">"searchCondition.dbId"</span>: <span class="string">"VDB"</span>,</span><br><span class="line">    <span class="string">"searchCondition.searchType"</span>: <span class="string">"Sino_foreign"</span>,</span><br><span class="line">    <span class="string">"searchCondition.power"</span>: <span class="string">"false"</span>,</span><br><span class="line">    <span class="string">"wee.bizlog.modulelevel"</span>: <span class="string">"0200201"</span>,</span><br><span class="line">    <span class="string">"resultPagination.limit"</span>: BaseConfig.CRAWLER_SPEED</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">yield</span> FormRequest(</span><br><span class="line">    url=<span class="string">"http://www.pss-system.gov.cn/sipopublicsearch/patentsearch/biaogejsAC!executeCommandSearchUnLogin.do"</span>,</span><br><span class="line">    callback=self.parsePatentList,</span><br><span class="line">    method=<span class="string">"POST"</span>,</span><br><span class="line">    headers=headers,</span><br><span class="line">    formdata=formData,</span><br><span class="line">    meta=&#123;</span><br><span class="line">        <span class="string">'searchExp'</span>: searchExp,</span><br><span class="line">        <span class="string">'inventionType'</span>: type,</span><br><span class="line">        <span class="string">'startDate'</span>: self.startDate,</span><br><span class="line">        <span class="string">'proposer'</span>: proposer,</span><br><span class="line">        <span class="string">'inventor'</span>: inventor</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="数据解析"><a href="#数据解析" class="headerlink" title="数据解析"></a>数据解析</h2><p>通过观察chrome的Element，可以逐个找出我们所需要的元素，例如：</p>
+<p><img src="http://img.blog.csdn.net/20170521011044233?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd2lsbDQ5MDY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+<p>本工程使用beautifulsoup进行解析，对于带class的元素，使用<code>find(attrs={&quot;class&quot;: &quot;className&quot;})</code>的方法采集即可，其他参数也类似。这里提供简单的例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">itemSoup = BeautifulSoup(item.prettify(), <span class="string">"lxml"</span>)</span><br><span class="line">header = itemSoup.find(attrs=&#123;<span class="string">"class"</span>: <span class="string">"item-header"</span>&#125;)</span><br><span class="line">pi[<span class="string">'name'</span>] = header.find(<span class="string">"h1"</span>).get_text(strip=<span class="keyword">True</span>)</span><br><span class="line">pi[<span class="string">'type'</span>] = header.find(attrs=&#123;<span class="string">"class"</span>: <span class="string">"btn-group left clear"</span>&#125;).get_text(strip=<span class="keyword">True</span>)</span><br><span class="line">pi[<span class="string">'patentType'</span>] = QueryInfo.inventionTypeToString(type)</span><br><span class="line">content = itemSoup.find(attrs=&#123;<span class="string">"class"</span>: <span class="string">"item-content-body left"</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h2><p>同样的需要对item使用yield，然后将数据传入pipeline中进行处理，关于更多数据处理的详细内容将会在下节内容中介绍。</p>
+<h2 id="源码下载"><a href="#源码下载" class="headerlink" title="源码下载"></a>源码下载</h2><ul>
+<li><a href="https://github.com/will4906/PatentCrawler" target="_blank" rel="noopener">github</a></li>
+</ul>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+            <li class="next">
+                <a href= "/2018/01/16/scrapy专利爬虫（四）——数据处理/" title= scrapy专利爬虫（四）——数据处理 >
+                    <span>Next Post</span>
+                    <span>scrapy专利爬虫（四）——数据处理</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2018/01/16/序列化/" title= python序列化 >
+                    <span>Previous Post</span>
+                    <span>python序列化</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -238,6 +295,13 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#确定链接"><span class="toc-number">1.</span> <span class="toc-text"><a href="#&#x786E;&#x5B9A;&#x94FE;&#x63A5;" class="headerlink" title="&#x786E;&#x5B9A;&#x94FE;&#x63A5;"></a>&#x786E;&#x5B9A;&#x94FE;&#x63A5;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送相关请求"><span class="toc-number">2.</span> <span class="toc-text"><a href="#&#x53D1;&#x9001;&#x76F8;&#x5173;&#x8BF7;&#x6C42;" class="headerlink" title="&#x53D1;&#x9001;&#x76F8;&#x5173;&#x8BF7;&#x6C42;"></a>&#x53D1;&#x9001;&#x76F8;&#x5173;&#x8BF7;&#x6C42;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#填写表单，发送请求"><span class="toc-number">3.</span> <span class="toc-text"><a href="#&#x586B;&#x5199;&#x8868;&#x5355;&#xFF0C;&#x53D1;&#x9001;&#x8BF7;&#x6C42;" class="headerlink" title="&#x586B;&#x5199;&#x8868;&#x5355;&#xFF0C;&#x53D1;&#x9001;&#x8BF7;&#x6C42;"></a>&#x586B;&#x5199;&#x8868;&#x5355;&#xFF0C;&#x53D1;&#x9001;&#x8BF7;&#x6C42;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据解析"><span class="toc-number">4.</span> <span class="toc-text"><a href="#&#x6570;&#x636E;&#x89E3;&#x6790;" class="headerlink" title="&#x6570;&#x636E;&#x89E3;&#x6790;"></a>&#x6570;&#x636E;&#x89E3;&#x6790;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据收集"><span class="toc-number">5.</span> <span class="toc-text"><a href="#&#x6570;&#x636E;&#x6536;&#x96C6;" class="headerlink" title="&#x6570;&#x636E;&#x6536;&#x96C6;"></a>&#x6570;&#x636E;&#x6536;&#x96C6;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码下载"><span class="toc-number">6.</span> <span class="toc-text"><a href="#&#x6E90;&#x7801;&#x4E0B;&#x8F7D;" class="headerlink" title="&#x6E90;&#x7801;&#x4E0B;&#x8F7D;"></a>&#x6E90;&#x7801;&#x4E0B;&#x8F7D;</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        about · 树华的博客
+        数据库触发器 · 树华的博客
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -67,6 +67,8 @@
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
@@ -74,27 +76,52 @@
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
     
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >willshuhua.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">数据库触发器</a>
+            </div>
+    </div>
+    
     <a class="home-link" href=/>willshuhua.</a>
 </header>
     <div class="wrapper">
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            数据库触发器
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/01/16</span>
+            </div>
         
     </div>
 </div>
@@ -164,12 +191,53 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h1><p>Hi����������</p>
+        <p>触发器虽然在sql标准中有支持，但是几个数据库仍然还是具有特殊的语法。笔者试着写了几个比较常用的触发器作为记录。</p>
+<h2 id="DEMO"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</h2><p>使用一下两个表作为触发器的使用示例</p>
+<ul>
+<li>test1(<u>a</u>, b, c, d)</li>
+<li>test2(<u>a</u>, c, d)<h3 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h3></li>
+<li><p>insert</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TRIGGER IF EXISTS after_insert_trigger;</span><br><span class="line">DELIMITER $</span><br><span class="line">CREATE TRIGGER after_insert_trigger</span><br><span class="line">AFTER INSERT ON test1</span><br><span class="line">FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">	INSERT INTO test2 VALUES(NEW.a, NEW.c, NEW.d);</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>update</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TRIGGER IF EXISTS after_update_trigger;</span><br><span class="line">DELIMITER $</span><br><span class="line">CREATE TRIGGER after_update_trigger</span><br><span class="line">AFTER UPDATE ON test1</span><br><span class="line">FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">	UPDATE test2 SET c = NEW.c, d = NEW.d WHERE test2.a = NEW.a;</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>delete</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TRIGGER IF EXISTS after_delete_trigger;</span><br><span class="line">DELIMITER $</span><br><span class="line">CREATE TRIGGER after_delete_trigger</span><br><span class="line">AFTER DELETE ON test1 </span><br><span class="line">FOR EACH ROW </span><br><span class="line">BEGIN </span><br><span class="line">DELETE FROM test2 WHERE test2.a = OLD.a;</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这里AFTER 指在事件发生后执行，我们也可以使用BEFORE在事件发生之前执行触发器的动作。</p>
+<blockquote>
+<p>在事件之前被执行的触发器可以作为避免非法更新、插入或删除的额外约束。为了避免执行非法动作而产生错误，触发器可以采取措施来纠正问题，使更新、插入或删除合法化。[1]</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TRIGGER IF EXISTS before_insert_trigger;</span><br><span class="line">DELIMITER $</span><br><span class="line">CREATE TRIGGER before_insert_trigger</span><br><span class="line">BEFORE INSERT ON test1</span><br><span class="line">FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">  SET NEW.b = NEW.b + 1;</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>DELIMITER<br>DELIMITER是用来定义分隔符的，由于BEGIN和END之中的多行执行语句需要’ ; ‘作为结尾，导致命令行提前以为语句书写结束，导致报错，需要使用DELIMITER定义临时分隔符，如’$’保证语句的正常执行。<h3 id="Postgresql"><a href="#Postgresql" class="headerlink" title="Postgresql"></a>Postgresql</h3></li>
+</ul>
+<p>postgresql对触发器的语法是比较特殊的，需要先定义执行函数，然后在出发器中使用<code>EXECUTE PROCEDURE</code>来处理执行的行为。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CREATE OR REPLACE FUNCTION after_insert_trigger()</span><br><span class="line">RETURNS TRIGGER AS $$</span><br><span class="line">BEGIN</span><br><span class="line">INSERT INTO test2 VALUES(NEW.a, NEW.c, NEW.d);</span><br><span class="line">RETURN NULL;</span><br><span class="line">END;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line">DROP TRIGGER IF EXISTS after_insert_trigger ON test1;</span><br><span class="line">CREATE TRIGGER after_insert_trigger</span><br><span class="line">    AFTER INSERT ON test1</span><br><span class="line">    FOR EACH ROW EXECUTE PROCEDURE after_insert_trigger();</span><br></pre></td></tr></table></figure>
+<p>其他行为语法均与上面例子相似，笔者便不再赘述。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] Abraham Silberschatz, Henry F.Korth S.Sudarshan. 数据库系统概念.杨冬青, 李红燕, 唐世渭等译. 北京. 机械工业出版社.2012.103-103.</p>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+            <li class="next">
+                <a href= "/2018/01/16/序列化/" title= python序列化 >
+                    <span>Next Post</span>
+                    <span>python序列化</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/19/my-test/" title= 首次测试 >
+                    <span>Previous Post</span>
+                    <span>首次测试</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -238,6 +306,13 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DEMO"><span class="toc-number">1.</span> <span class="toc-text"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mysql"><span class="toc-number">1.1.</span> <span class="toc-text"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Postgresql"><span class="toc-number">1.2.</span> <span class="toc-text"><a href="#Postgresql" class="headerlink" title="Postgresql"></a>Postgresql</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">2.</span> <span class="toc-text"><a href="#&#x53C2;&#x8003;&#x6587;&#x732E;" class="headerlink" title="&#x53C2;&#x8003;&#x6587;&#x732E;"></a>&#x53C2;&#x8003;&#x6587;&#x732E;</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">
