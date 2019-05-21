@@ -1,0 +1,31 @@
+/* .leaflet-zoombar-control { */
+/* background: red;
+  height: 200px;
+  width: 200px;
+} */
+
+.leaflet-zoombar-control {
+  /* border: solid rgba(255, 255, 255, 1) 1px; */
+  /* background: #f8f8f9; */
+  transition: all 0.2s;
+  height: 150px;
+  width: 150px;
+}
+
+.leaflet-control-zoombar-toggle {
+  z-index: 99999;
+  background: #f8f8f9;
+  background-image: url("images/zoom.png");
+  background-size: cover;
+  position: absolute;
+  left: 50%; /* 定位父级的50% */
+  top: 50%;
+  transform: translate(-50%, -50%); /*自己的50% */
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.leaflet-control-zoom-btn {
+  cursor: pointer;
+  border-radius: 3px;
+}
